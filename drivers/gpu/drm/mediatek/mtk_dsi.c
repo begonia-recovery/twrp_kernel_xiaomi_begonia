@@ -1874,6 +1874,12 @@ static void mtk_output_en_doze_switch(struct mtk_dsi *dsi)
 		}
 	}
 
+        mtk_dsi_reset_engine(dsi);
+        mtk_dsi_lane0_ulp_mode_enter(dsi);
+        mtk_dsi_clk_ulp_mode_enter(dsi);
+        /* set the lane number as 0 to pull down mipi */
+        writel(0, dsi->regs + DSI_TXRX_CTRL);
+
 	if (doze_enabled && panel_funcs->doze_enable)
 		panel_funcs->doze_enable(dsi->panel, dsi,
 			mipi_dsi_dcs_write_gce2, NULL);
